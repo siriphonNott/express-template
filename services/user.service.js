@@ -1,5 +1,7 @@
-const User = require('../models/User')
-const config = require('../configs/app')
+const User = require('../models/User'),
+      config = require('../configs/app'),
+      jwt = require('jsonwebtoken')
+
 
 const methods = {
 
@@ -97,7 +99,7 @@ const methods = {
     return new Promise(async (resolve, reject)=>{
       try {
         let obj = await User.findOne({username: data.username});
-        if(obj.length < 1) {
+        if(!obj) {
           reject(methods.error('username not found', 401))
         }
         
@@ -105,7 +107,22 @@ const methods = {
           reject(methods.error('password is invalid.', 401))
         }
         
-        resolve({token: obj.generateJWT(obj)})
+        resolve({accessToken: obj.generateJWT(obj),userData: obj})
+      } catch (error) {
+        reject(error)
+      }
+    })
+  },
+
+  refreshToken(accessToken) {
+    return new Promise(async (resolve, reject)=>{
+      try {
+        let decoded = jwt.decode(accessToken);
+        let obj = await User.findOne({username: decoded.username});
+        if(!obj) {
+          reject(methods.error('username not found', 401))
+        }
+        resolve({accessToken: obj.generateJWT(obj),userData: obj})
       } catch (error) {
         reject(error)
       }

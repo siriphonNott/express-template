@@ -1,7 +1,7 @@
 module.exports = (req, res,  next) => {
   
   res.success = (data = '', statusCode = 200) => {
-    res.status(statusCode || 200).send({data: data})
+    res.status(statusCode || 200).send(data)
   }
 
   res.error = (errorMsg = '', statusCode = 500) => {

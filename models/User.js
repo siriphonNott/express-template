@@ -20,7 +20,8 @@ schema.plugin(uniqueValidator);
 schema.methods.generateJWT = function(obj) {
   let today = new Date(),
       exp = new Date(today)
-  exp.setDate(today.getDate() + config.token_exp_days || 1);
+  // exp.setDate(today.getDate() + config.token_exp_days || 1);
+  exp.setMinutes(today.getMinutes() + 30);
   
   return jwt.sign({
     id: this._id,
@@ -36,9 +37,10 @@ schema.methods.toJSON = function() {
     username: this.username,
     email: this.email,
     age: this.age,
+    photoURL: this.image || 'https://icons-for-free.com/iconfiles/png/512/business+costume+male+man+office+user+icon-1320196264882354682.png',
     birthday: this.birthday,
-    createdAt: toDateTime({_d: this.createdAt, locale: 'th'}),
-    updatedAt: toDateTime({_d: this.updatedAt, locale: 'th'}),
+    createdAt: this.createdAt,
+    updatedAt: this.updatedAt
   }
 }
 

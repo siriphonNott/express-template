@@ -2,13 +2,12 @@ const express = require('express'),
       morgan = require('morgan'),
       cors = require('cors')
       passport = require("passport"),
-      path = require('path'),
-      databases = require('../configs/databases')
+      path = require('path')
 
 module.exports = async (app) => {
   
   // Connect MongoDB
-  databases.mongoDB()
+  require('../configs/databases')
 
   // CORS
   app.use(cors())

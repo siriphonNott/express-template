@@ -1,7 +1,6 @@
 const mongoose = require('mongoose')
 const config = require('../configs/app')
 
-
 const databases = {
 
   mongoDB(){
@@ -12,7 +11,17 @@ const databases = {
     return db;
   },
 
-  mysql(){},
+  mysql(){
+    const connection  = mysql.createPool({
+      connectionLimit : 10,
+      host            : config.hostname,
+      user            : config.username,
+      password        : config.password,
+      database        : config.database,
+      charset         : 'utf8'
+    });
+    return connection;
+  },
 
   postgresql(){},
 
@@ -20,4 +29,4 @@ const databases = {
 
 }
 
-module.exports = { ...databases }
+module.exports = databases.mongoDB()

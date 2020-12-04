@@ -16,10 +16,11 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "winston": "^3.3.3"
   },
   "scripts": {
-    "start": "nodemon .",
-    "start:prod": "NODE_ENV=production node ."
+    "dev": "nodemon .",
+    "start": "NODE_ENV=production node ."
   }
 }

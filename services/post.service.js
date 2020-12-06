@@ -10,7 +10,7 @@ const methods = {
     const query = $or.length > 0 ? { $or } : {}
     const sort = { createdAt: -1 }
     if (req.query.orderByField && req.query.orderBy)
-      sort = { [req.query.orderByField]: req.query.orderBy.toLowerCase() == 'desc' ? -1 : 1 }
+      sort[req.query.orderByField] = req.query.orderBy.toLowerCase() == 'desc' ? -1 : 1
     return { query: query, sort: sort }
   },
 
@@ -73,8 +73,8 @@ const methods = {
       try {
         const obj = await Post.findById(id)
         if (!obj) reject(ErrorNotFound('id: not found'))
-        const updated = await Post.updateOne({ _id: id }, data)
-        resolve(updated)
+        await Post.updateOne({ _id: id }, data)
+        resolve(Object.assign(obj, data))
       } catch (error) {
         reject(error)
       }
@@ -84,7 +84,7 @@ const methods = {
   delete(id) {
     return new Promise(async (resolve, reject) => {
       try {
-        let obj = await Post.findById(id)
+        const obj = await Post.findById(id)
         if (!obj) reject(ErrorNotFound('id: not found'))
         await Post.deleteOne({ _id: id })
         resolve()

@@ -12,7 +12,7 @@ const methods = {
     const query = $or.length > 0 ? { $or } : {}
     const sort = { createdAt: -1 }
     if (req.query.orderByField && req.query.orderBy)
-      sort = { [req.query.orderByField]: req.query.orderBy.toLowerCase() == 'desc' ? -1 : 1 }
+      sort[req.query.orderByField] = req.query.orderBy.toLowerCase() == 'desc' ? -1 : 1
     return { query: query, sort: sort }
   },
 
@@ -72,8 +72,8 @@ const methods = {
       try {
         const obj = await User.findById(id)
         if (!obj) reject(ErrorNotFound('id: not found'))
-        const updated = await User.updateOne({ _id: id }, data)
-        resolve(updated)
+        await User.updateOne({ _id: id }, data)
+        resolve(Object.assign(obj, data))
       } catch (error) {
         reject(error)
       }

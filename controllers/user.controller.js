@@ -30,8 +30,8 @@ const methods = {
 
   async onUpdate(req, res) {
     try {
-      await Service.update(req.params.id, req.body)
-      res.success('success')
+      const result = await Service.update(req.params.id, req.body)
+      res.success(result)
     } catch (error) {
       res.error(error)
     }
